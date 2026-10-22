@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#101b34"><meta name="description" content="Secure parcel tracking and order management portal">
+  <title>ParcelGuard | Order Tracking</title><link rel="stylesheet" href="/styles.css">
+  <script defer src="/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#" data-view="home"><span class="brand-mark">P</span><span>parcel<span class="brand-light">guard</span><small>ORDER INTELLIGENCE</small></span></a>
+  <nav><button class="nav-link active" data-view="home">Track order</button><button class="nav-link" data-view="signin">Sign in</button><button class="nav-link hidden" id="dashboardNav" data-view="dashboard">Dashboard</button></nav>
+  <div class="secure-pill"><span></span> Secure portal</div>
+</header>
+<main>
+  <section id="homeView" class="view">
+    <div class="hero">
+      <div class="hero-copy"><div class="eyebrow"><span class="eyebrow-line"></span> YOUR DELIVERY, IN VIEW</div>
+        <h1>Every parcel.<br><span>Every milestone.</span></h1>
+        <p>Follow your order from dispatch to doorstep with clear, secure tracking updates.</p>
+        <div class="trust-row"><span>✓ Private by design</span><span>✓ Real-time-ready</span><span>✓ One place to track</span></div>
+      </div>
+      <div class="track-card">
+        <div class="card-icon">↗</div><h2>Track a shipment</h2><p>Enter the tracking number shared by the store.</p>
+        <form id="trackForm"><label for="trackingInput">TRACKING NUMBER</label><div class="track-input"><span>⌕</span><input id="trackingInput" autocomplete="off" placeholder="e.g. TRK8F21A9C3D" required minlength="8" maxlength="64"><button type="submit" aria-label="Track order">→</button></div></form>
+        <div class="card-foot"><span class="lock">▣</span> Your private details stay private.</div>
+      </div>
+    </div>
+    <section class="result-wrap hidden" id="trackingResult"></section>
+    <section class="steps-section"><div class="section-heading"><div><div class="eyebrow">HOW IT WORKS</div><h2>Clarity at every step.</h2></div><span class="muted">A better way to follow your delivery.</span></div>
+      <div class="feature-grid"><article class="feature"><span class="feature-icon blue">01</span><h3>Place your order</h3><p>Your store shares a unique tracking number after your order is registered.</p></article><article class="feature"><span class="feature-icon violet">02</span><h3>Follow the journey</h3><p>See the latest milestone, delivery estimate and shipment events in one view.</p></article><article class="feature"><span class="feature-icon green">03</span><h3>Know when it arrives</h3><p>Delivery status is updated by the store or connected courier service.</p></article></div>
+    </section>
+  </section>
+  <section id="signinView" class="view hidden">
+    <div class="auth-layout"><div class="auth-side"><div class="eyebrow">WELCOME TO PARCELGUARD</div><h1>Your orders,<br><span>under control.</span></h1><p>Sign in to see your orders and follow each delivery milestone.</p><div class="side-note">Protected sessions · Encrypted sensitive fields · Private order history</div></div>
+      <div class="auth-card"><div class="auth-tabs"><button class="auth-tab active" data-auth="login">Sign in</button><button class="auth-tab" data-auth="register">Create account</button></div>
+        <form id="authForm"><div id="nameField" class="field hidden"><label>FULL NAME</label><input name="name" minlength="2" maxlength="120" placeholder="Your full name"></div><div class="field"><label>EMAIL ADDRESS</label><input name="email" type="email" autocomplete="email" required placeholder="you@example.com"></div><div class="field"><label>PASSWORD</label><input name="password" type="password" autocomplete="current-password" minlength="1" required placeholder="Enter your password"></div><p class="hint" id="passwordHint">Use your registered email and password.</p><button class="primary-btn full" type="submit" id="authSubmit">Sign in securely <span>→</span></button><p class="form-message" id="authMessage"></p></form>
+      </div>
+    </div>
+  </section>
+  <section id="dashboardView" class="view hidden">
+    <div class="dash-head"><div><div class="eyebrow">YOUR PARCELGUARD</div><h1 id="dashTitle">Your dashboard</h1><p id="dashSubtitle">All your deliveries in one place.</p></div><button class="outline-btn" id="logoutBtn">Sign out ↗</button></div>
+    <div id="customerDash" class="hidden"><div class="metric-grid" id="customerMetrics"></div><div class="panel"><div class="panel-heading"><div><h2>Your orders</h2><p>Choose a shipment to see its latest journey.</p></div><button class="outline-btn" data-view="home">Track another order</button></div><div id="customerOrders" class="orders-list"></div></div></div>
+    <div id="adminDash" class="hidden">
+      <div class="metric-grid" id="adminMetrics"></div>
+      <div class="panel"><div class="panel-heading"><div><h2>Order management</h2><p>Create orders, update delivery milestones and sync courier events.</p></div><button class="primary-btn" id="newOrderBtn">＋ New order</button></div>
+        <div class="toolbar"><div class="searchbox"><span>⌕</span><input id="adminSearch" placeholder="Search order, tracking or customer..."></div><button class="outline-btn" id="refreshAdmin">Refresh ↻</button></div>
+        <div class="table-scroll"><table><thead><tr><th>ORDER / TRACKING</th><th>CUSTOMER</th><th>ITEM</th><th>STATUS</th><th>DELIVERY</th><th>ACTIONS</th></tr></thead><tbody id="adminOrders"></tbody></table></div><div id="adminEmpty" class="empty-state hidden">No orders match this search.</div>
+      </div>
+      <div class="panel"><div class="panel-heading"><div><h2>Customer directory</h2><p>Registered accounts and order counts.</p></div><button class="outline-btn" id="loadCustomers">Load customers</button></div><div id="customersList" class="customer-list muted">Customer list is loaded on request.</div></div>
+    </div>
+  </section>
+</main>
+<footer><a class="brand small-brand" href="#" data-view="home"><span class="brand-mark">P</span><span>parcel<span class="brand-light">guard</span></span></a><span>Secure order visibility, built for trust.</span><span class="footer-lock">▣ Encrypted sensitive data</span></footer>
+<div id="toast" class="toast" role="status"></div>
+<dialog id="orderDialog"><form id="orderForm" method="dialog"><div class="dialog-head"><div><div class="eyebrow">ORDER WORKSPACE</div><h2>Create an order</h2></div><button type="button" class="close-btn" id="closeOrder">×</button></div><div class="form-grid"><div class="field"><label>CUSTOMER EMAIL</label><input name="customerEmail" type="email" required placeholder="customer@example.com"></div><div class="field"><label>CUSTOMER NAME</label><input name="customerName" required minlength="2" maxlength="120" placeholder="Customer name"></div><div class="field span-2"><label>ITEM / ORDER SUMMARY</label><input name="itemSummary" required maxlength="240" placeholder="e.g. Wireless headphones"></div><div class="field"><label>AMOUNT (INR)</label><input name="amount" type="number" min="0" step=".01" required value="0"></div><div class="field"><label>ESTIMATED DELIVERY</label><input name="estimatedDelivery" type="date"></div><div class="field"><label>COURIER SLUG</label><input name="carrier" placeholder="e.g. dhl, fedex, bluedart"></div><div class="field"><label>COURIER TRACKING ID</label><input name="carrierTrackingId" placeholder="Courier's tracking number"></div><div class="field span-2"><label>DESTINATION (ENCRYPTED AT REST)</label><input name="destination" maxlength="1000" placeholder="Delivery address"></div><div class="field span-2"><label>INTERNAL NOTES (ENCRYPTED AT REST)</label><textarea name="notes" rows="2" maxlength="2000" placeholder="Optional private note"></textarea></div></div><p class="form-message" id="orderMessage"></p><button class="primary-btn full" type="submit">Create secure order <span>→</span></button><p class="hint">The customer must have created an account first. A unique tracking number is generated automatically.</p></form></dialog>
+<dialog id="statusDialog"><form id="statusForm" method="dialog"><div class="dialog-head"><div><div class="eyebrow">TRACKING MILESTONE</div><h2>Update shipment</h2></div><button type="button" class="close-btn" id="closeStatus">×</button></div><input type="hidden" name="id"><div class="field"><label>NEW STATUS</label><select name="status" required></select></div><div class="field"><label>UPDATE NOTE</label><textarea name="description" maxlength="500" rows="3" placeholder="Optional note visible in tracking timeline"></textarea></div><div class="field"><label>LOCATION</label><input name="location" maxlength="160" placeholder="e.g. Kolkata sorting facility"></div><p class="form-message" id="statusMessage"></p><button class="primary-btn full" type="submit">Save tracking update <span>→</span></button></form></dialog>
+</body></html>
